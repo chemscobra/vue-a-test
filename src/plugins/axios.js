@@ -23,18 +23,18 @@ export default {
     });
   },
   getItem(itemId) {
-    return axios.get(`/items/${itemId}`);
+    return axios.get(`/item/${itemId}`);
   },
 
   updateItem(itemId, payload) {
-    return axios.put(`/items/${itemId}`, payload);
+    return axios.put(`/item/${itemId}`, payload);
   },
 
   createItem(payload) {
-    return axios.post('/items', payload);
+    return axios.post('/item', payload);
   },
 
   deleteItem(itemId) {
-    return axios.delete(`/items/${itemId}`);
+    return axios.delete(`/item/${itemId}`);
   }
 };
