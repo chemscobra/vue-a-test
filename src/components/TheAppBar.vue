@@ -27,6 +27,7 @@
         v-for="(item, index) in routeItems"
         :key="`tab-${index}`"
         :to="item.route"
+        class="font-weight-bold"
       >
         {{ item.title }}
         <v-icon> {{ item.icon }} </v-icon>
