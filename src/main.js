@@ -3,9 +3,9 @@ import App from './App.vue';
 import router from './router';
 import store from './store';
 import vuetify from './plugins/vuetify';
-import axios from './plugins/axios';
+import API from './plugins/axios';
 
-Vue.prototype.$axios = axios;
+Vue.prototype.$API = API;
 
 Vue.config.productionTip = false;
 
