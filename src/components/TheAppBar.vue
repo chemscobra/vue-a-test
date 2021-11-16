@@ -6,7 +6,7 @@
           alt="Company Logo"
           class="shrink mr-2"
           contain
-          src="../assets/logo.png"
+          :src="require('../assets/logo.svg')"
           transition="scale-transition"
           width="40"
         />
