@@ -23,19 +23,19 @@ const routes = [
     }
   },
   {
-    path: '/items',
-    name: 'Item List',
-    component: () => import('../views/ItemList.vue'),
+    path: '/inventory',
+    name: 'Inventory',
+    component: () => import('../views/Inventory.vue'),
     meta: {
-      title: 'Item List - Vue Test App',
+      title: 'Inventory - Vue Test App',
       metaTags: [
         {
           name: 'description',
-          content: 'The Item List Page of a Vue.js Test'
+          content: 'The Inventory Page of a Vue.js Test'
         },
         {
           property: 'og:description',
-          content: 'The Item List Page of a Vue.js Test'
+          content: 'The Inventory Page of a Vue.js Test'
         }
       ]
     }

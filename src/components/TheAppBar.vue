@@ -56,8 +56,8 @@ export default {
           icon: 'mdi-home'
         },
         {
-          title: 'Items',
-          route: '/items',
+          title: 'Inventory',
+          route: '/inventory',
           icon: 'mdi-storefront'
         }
       ]
