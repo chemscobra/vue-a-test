@@ -3,16 +3,9 @@ import App from './App.vue';
 import router from './router';
 import store from './store';
 import vuetify from './plugins/vuetify';
-import Axios from 'axios';
+import axios from './plugins/axios';
 
-Vue.prototype.$axios = Axios.create({
-  baseURL: process.env.VUE_APP_BASE_API_HOST,
-  headers: {
-    Accept: 'application/json',
-    'Content-Type': 'application/json',
-    Authorization: `Bearer ${process.env.VUE_APP_ACCESS_TOKEN}`
-  }
-});
+Vue.prototype.$axios = axios;
 
 Vue.config.productionTip = false;
 
