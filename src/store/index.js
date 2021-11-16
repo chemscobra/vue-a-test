@@ -6,11 +6,15 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    itemList: null
+    itemList: null,
+    categoryList: null
   },
   mutations: {
     setItemList(state, itemList) {
       state.itemList = itemList;
+    },
+    setCategoryList(state, categoryList) {
+      state.categoryList = categoryList;
     },
     createItem(state, item) {
       state.itemList.push(item);
@@ -30,6 +34,18 @@ export default new Vuex.Store({
           .then((res) => {
             const { data } = res.data;
             commit('setItemList', data);
+            resolve(res);
+          })
+          .catch((err) => {
+            reject(err);
+          });
+      });
+    },
+    fetchCategories({ commit }) {
+      return new Promise((resolve, reject) => {
+        API.listCategories()
+          .then((res) => {
+            commit('setCategoryList', res.data);
             resolve(res);
           })
           .catch((err) => {
@@ -72,6 +88,11 @@ export default new Vuex.Store({
             reject(err);
           });
       });
+    }
+  },
+  getters: {
+    getCategoryList(state) {
+      return state.categoryList;
     }
   }
 });
