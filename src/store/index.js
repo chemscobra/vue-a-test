@@ -2,22 +2,43 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import API from '../plugins/axios';
 
+import { objectKeysFromSnakeToCamelCase } from '../utils/helpers';
+
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
     itemList: null,
-    categoryList: null
+    categoryList: [],
+    editedItemIndex: -1,
+    toEditItem: {
+      name: '',
+      description: '',
+      quantity: '',
+      categoryId: '',
+      priceTaxExcluded: 0,
+      status: '0'
+    },
+    itemFormDialog: false
   },
   mutations: {
     setItemList(state, itemList) {
       state.itemList = itemList;
     },
+    setToEditItem(state, toEditItem) {
+      state.toEditItem = toEditItem;
+    },
+    setItemFormDialog(state, itemFormDialog) {
+      state.itemFormDialog = itemFormDialog;
+    },
+    setEditedItemIndex(state, editedItemIndex) {
+      state.editedItemIndex = editedItemIndex;
+    },
     setCategoryList(state, categoryList) {
       state.categoryList = categoryList;
     },
     createItem(state, item) {
-      state.itemList.push(item);
+      state.itemList.unshift(item);
     },
     deleteItem(state, itemId) {
       state.itemList = state.itemList.filter((item) => item.id !== itemId);
@@ -57,7 +78,8 @@ export default new Vuex.Store({
       return new Promise((resolve, reject) => {
         API.createItem(newItem)
           .then((res) => {
-            commit('createItem', res.data);
+            const parsedItem = objectKeysFromSnakeToCamelCase(res.data);
+            commit('createItem', parsedItem);
             resolve(res);
           })
           .catch((err) => {
@@ -69,7 +91,7 @@ export default new Vuex.Store({
       return new Promise((resolve, reject) => {
         API.deleteItem(itemId)
           .then((res) => {
-            commit('deleteItem', itemId);
+            commit('deleteItem', +itemId);
             resolve(res);
           })
           .catch((err) => {
@@ -93,6 +115,12 @@ export default new Vuex.Store({
   getters: {
     getCategoryList(state) {
       return state.categoryList;
+    },
+    getCategoryListForVSelect(state) {
+      return state.categoryList.map(({ id, name }) => ({
+        text: name,
+        value: id.toString()
+      }));
     }
   }
 });

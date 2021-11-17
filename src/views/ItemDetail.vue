@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import { parseStringToSnakeCase } from '../utils/string';
+import { parseStringToSnakeCase } from '../utils/helpers';
 import ItemDetailCard from '../components/ItemDetailCard.vue';
 import AlertError from '../components/AlertError.vue';
 export default {
