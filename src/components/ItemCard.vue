@@ -6,7 +6,7 @@
           {{ item.name }}
         </v-list-item-title>
         <v-list-item-subtitle>
-          Quantity: {{ item.quantity }}
+          Quantity: {{ +item.quantity || 'OUT OF STOCK' }}
         </v-list-item-subtitle>
       </v-list-item-content>
       <v-badge :color="itemStatus" offset-x="25" offset-y="25">

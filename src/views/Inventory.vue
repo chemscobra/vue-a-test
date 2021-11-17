@@ -1,7 +1,7 @@
 <template>
   <div class="inventory">
     <ItemListSkeleton v-if="loading" />
-    <ItemListError v-else-if="error" :error="error" />
+    <AlertError v-else-if="error" :error="error" />
     <ItemList v-else :items="itemList" />
   </div>
 </template>
@@ -9,13 +9,13 @@
 <script>
 import ItemList from '../components/ItemList.vue';
 import ItemListSkeleton from '../components/ItemListSkeleton.vue';
-import ItemListError from '../components/ItemListError.vue';
+import AlertError from '../components/AlertError.vue';
 export default {
   name: 'Inventory',
   components: {
     ItemList,
     ItemListSkeleton,
-    ItemListError
+    AlertError
   },
   data() {
     return {
