@@ -46,8 +46,9 @@ export default {
     },
     categoryName() {
       return (
-        this.categories.find(({ id }) => +id === +this.item.categoryId)?.name ||
-        'unknown'
+        this.categories.find(
+          ({ id }) => parseInt(id) === parseInt(this.item.categoryId)
+        )?.name || 'unknown'
       );
     },
     categoryImgSrc() {

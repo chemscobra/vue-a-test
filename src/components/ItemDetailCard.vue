@@ -18,7 +18,7 @@
     <v-divider class="mx-4"></v-divider>
 
     <v-card-title
-      >Quantity: {{ +item.quantity || 'OUT OF STOCK' }}</v-card-title
+      >Quantity: {{ parseInt(item.quantity) || 'OUT OF STOCK' }}</v-card-title
     >
   </v-card>
 </template>

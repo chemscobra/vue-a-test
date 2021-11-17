@@ -41,6 +41,17 @@
     >
       <router-view v-if="activeTab === item.route" />
     </v-tab-item>
+    <v-spacer></v-spacer>
+    <v-chip
+      color="info"
+      class="text-no-wrap font-weight-bold text-h5 mr-10 px-10"
+      dark
+      large
+    >
+      <v-avatar left>💰</v-avatar>
+      {{ $store.state.userBalance }}
+    </v-chip>
+    <v-spacer></v-spacer>
   </v-app-bar>
 </template>
 

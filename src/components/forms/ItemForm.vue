@@ -41,8 +41,35 @@
                   label="Category *"
                   dense
                   outlined
-                ></v-select
-              ></v-col>
+                >
+                  <template #item="{ item }">
+                    <v-list-item-avatar size="32" tile>
+                      <img
+                        :src="
+                          require(`@/assets/category_icons/${item.iconName}.png`)
+                        "
+                        contain
+                      />
+                    </v-list-item-avatar>
+                    <v-list-item-content>
+                      <v-list-item-title> {{ item.text }} </v-list-item-title>
+                    </v-list-item-content>
+                  </template>
+                  <template #selection="{ item }">
+                    <v-list-item-avatar size="24" tile>
+                      <img
+                        :src="
+                          require(`@/assets/category_icons/${item.iconName}.png`)
+                        "
+                        contain
+                      />
+                    </v-list-item-avatar>
+                    <v-list-item-content>
+                      <v-list-item-title> {{ item.text }} </v-list-item-title>
+                    </v-list-item-content>
+                  </template>
+                </v-select>
+              </v-col>
               <v-col cols="12">
                 <v-textarea
                   outlined
