@@ -6,7 +6,7 @@
           {{ item.name }}
         </v-list-item-title>
         <v-list-item-subtitle>
-          Quantity: {{ +item.quantity || 'OUT OF STOCK' }}
+          Quantity: {{ parseInt(item.quantity) || 'OUT OF STOCK' }}
         </v-list-item-subtitle>
       </v-list-item-content>
       <v-badge :color="itemStatus" offset-x="25" offset-y="25">
@@ -57,13 +57,91 @@
               Cancel
             </v-btn>
             <v-spacer></v-spacer>
-            <v-btn
-              color="error"
-              text
-              dark
-              @click.prevent="$emit('delete-item', item.id)"
-            >
+            <v-btn color="error" text dark @click.prevent="emitDelete">
               Delete
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+      <v-dialog v-model="buyDialog" width="500">
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            v-if="$store.state.userBalance >= 0"
+            icon
+            v-bind="attrs"
+            v-on="on"
+            color="info"
+          >
+            <v-icon color="info"> mdi-arrow-down </v-icon>
+          </v-btn>
+        </template>
+        <v-card>
+          <v-card-title class="headline error" primary-title>
+            Buy Item
+          </v-card-title>
+
+          <v-card-text>
+            <v-text-field
+              class="ma-6"
+              v-model="quantityToBuy"
+              label="Quantity To Buy"
+              outlined
+              dense
+              type="number"
+              min="5"
+            ></v-text-field>
+          </v-card-text>
+
+          <v-divider></v-divider>
+
+          <v-card-actions>
+            <v-btn color="primary" outlined text @click="buyDialog = false">
+              Cancel
+            </v-btn>
+            <v-spacer></v-spacer>
+            <v-btn color="info" text dark @click.prevent="emitBuy"> Buy </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+      <v-dialog v-model="sellDialog" width="500">
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            v-if="parseInt(item.quantity) > 0"
+            icon
+            v-bind="attrs"
+            v-on="on"
+            color="success"
+          >
+            <v-icon color="success"> mdi-arrow-up </v-icon>
+          </v-btn>
+        </template>
+
+        <v-card>
+          <v-card-title class="headline error" primary-title>
+            Sell Item
+          </v-card-title>
+
+          <v-card-text>
+            <v-text-field
+              class="ma-6"
+              v-model="quantityToSell"
+              label="Quantity To Sell"
+              outlined
+              dense
+              type="number"
+              min="5"
+            ></v-text-field>
+          </v-card-text>
+
+          <v-divider></v-divider>
+
+          <v-card-actions>
+            <v-btn color="primary" outlined text @click="sellDialog = false">
+              Cancel
+            </v-btn>
+            <v-spacer></v-spacer>
+            <v-btn color="success" text dark @click.prevent="emitSell">
+              Sell
             </v-btn>
           </v-card-actions>
         </v-card>
@@ -87,12 +165,38 @@ export default {
   },
   data() {
     return {
-      deleteDialog: false
+      deleteDialog: false,
+      buyDialog: false,
+      quantityToBuy: 0,
+      sellDialog: false,
+      quantityToSell: 0
     };
   },
   computed: {
     itemStatus() {
       return this.item.status === '1' ? 'success' : 'error';
+    }
+  },
+  methods: {
+    emitSell() {
+      this.$emit('sell-item', {
+        itemId: this.item.id,
+        quantityToSell: this.quantityToSell
+      });
+      this.quantityToSell = 0;
+      this.sellDialog = false;
+    },
+    emitBuy() {
+      this.$emit('buy-item', {
+        itemId: this.item.id,
+        quantityToBuy: this.quantityToBuy
+      });
+      this.quantityToBuy = 0;
+      this.buyDialog = false;
+    },
+    emitDelete() {
+      this.$emit('delete-item', this.item.id);
+      this.deleteDialog = false;
     }
   }
 };

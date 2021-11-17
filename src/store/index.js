@@ -1,10 +1,15 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import API from '../plugins/axios';
-
-import { objectKeysFromSnakeToCamelCase } from '../utils/helpers';
+import _pick from 'lodash.pick';
+import {
+  objectKeysFromSnakeToCamelCase,
+  stringSentenceToSnakeCase
+} from '../utils/helpers';
 
 Vue.use(Vuex);
+
+const ALLOWED_KEYS = ['id', 'name', 'quantity', 'status'];
 
 export default new Vuex.Store({
   state: {
@@ -19,9 +24,30 @@ export default new Vuex.Store({
       priceTaxExcluded: 0,
       status: '0'
     },
-    itemFormDialog: false
+    itemFormDialog: false,
+    userBalance: 0
   },
   mutations: {
+    setUserBalance(state, balance) {
+      localStorage.setItem('userBalance', balance);
+      state.userBalance = balance;
+    },
+    decreaseUserBalance(state, amount) {
+      const newBalance = parseFloat(state.userBalance) - amount;
+      localStorage.setItem('userBalance', newBalance.toFixed(2));
+      state.userBalance = newBalance;
+    },
+    increaseUserBalance(state, amount) {
+      const newBalance = parseFloat(state.userBalance) + amount;
+      localStorage.setItem('userBalance', newBalance.toFixed(2));
+      state.userBalance = newBalance;
+    },
+    initializeStore(state) {
+      const localUserBalance = localStorage.getItem('userBalance');
+      if (localUserBalance) {
+        state.userBalance = localUserBalance;
+      }
+    },
     setItemList(state, itemList) {
       state.itemList = itemList;
     },
@@ -41,11 +67,20 @@ export default new Vuex.Store({
       state.itemList.unshift(item);
     },
     deleteItem(state, itemId) {
-      state.itemList = state.itemList.filter((item) => item.id !== itemId);
+      state.itemList = state.itemList.filter(
+        (item) => parseInt(item.id) !== parseInt(itemId)
+      );
     },
-    updateItem(state, item) {
-      const index = state.itemList.findIndex((item) => item.id === item.id);
-      Vue.set(state.itemList, index, item);
+    updateItem(state, newItem) {
+      // 👀 problems with key updates
+      // const index = state.itemList.findIndex((item) => parseInt(item.id) !== parseInt(itemId));
+      // Vue.set(state.itemList, index, item);
+      state.itemList = state.itemList.map((_item) => {
+        if (_item.id === newItem.id) {
+          return Object.assign({}, _item, newItem);
+        }
+        return _item;
+      });
     }
   },
   actions: {
@@ -78,7 +113,10 @@ export default new Vuex.Store({
       return new Promise((resolve, reject) => {
         API.createItem(newItem)
           .then((res) => {
-            const parsedItem = objectKeysFromSnakeToCamelCase(res.data);
+            const parsedItem = _pick(
+              objectKeysFromSnakeToCamelCase(res.data),
+              ALLOWED_KEYS
+            );
             commit('createItem', parsedItem);
             resolve(res);
           })
@@ -91,7 +129,7 @@ export default new Vuex.Store({
       return new Promise((resolve, reject) => {
         API.deleteItem(itemId)
           .then((res) => {
-            commit('deleteItem', +itemId);
+            commit('deleteItem', parseInt(itemId));
             resolve(res);
           })
           .catch((err) => {
@@ -103,7 +141,11 @@ export default new Vuex.Store({
       return new Promise((resolve, reject) => {
         API.updateItem(item)
           .then((res) => {
-            commit('updateItem', res.data);
+            const parsedItem = _pick(
+              objectKeysFromSnakeToCamelCase(res.data),
+              ALLOWED_KEYS
+            );
+            commit('updateItem', parsedItem);
             resolve(res);
           })
           .catch((err) => {
@@ -119,7 +161,8 @@ export default new Vuex.Store({
     getCategoryListForVSelect(state) {
       return state.categoryList.map(({ id, name }) => ({
         text: name,
-        value: id.toString()
+        value: id.toString(),
+        iconName: stringSentenceToSnakeCase(name)
       }));
     }
   }
