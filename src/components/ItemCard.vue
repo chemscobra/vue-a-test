@@ -16,7 +16,7 @@
       </v-badge>
     </v-list-item>
     <v-card-actions>
-      <v-btn outlined rounded text :to="`/items/${item.id}/detail`">
+      <v-btn rounded :to="`/items/${item.id}/detail`" color="cyan lighten-1">
         Details
       </v-btn>
       <v-tooltip top>

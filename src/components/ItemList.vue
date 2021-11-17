@@ -1,5 +1,5 @@
 <template>
-  <v-card class="overflow-y-visible" elevation="0">
+  <v-card class="overflow-y-visible ma-5" elevation="0">
     <v-row dense>
       <v-col v-for="item in items" :key="item.id" cols="12" sm="6" md="3">
         <ItemCard
