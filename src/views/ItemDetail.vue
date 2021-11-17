@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import { parseStringToSnakeCase } from '../utils/helpers';
+import { stringSentenceToSnakeCase } from '../utils/helpers';
 import ItemDetailCard from '../components/ItemDetailCard.vue';
 import AlertError from '../components/AlertError.vue';
 export default {
@@ -34,13 +34,15 @@ export default {
       error: null
     };
   },
-  created() {
-    this.fetchCategories();
-    this.fetchItem(this.itemId);
+  async mounted() {
+    this.loading = true;
+    await this.fetchCategories();
+    await this.fetchItem(this.itemId);
+    this.loading = false;
   },
   computed: {
     categories() {
-      return this.$store.state.categoryList || [];
+      return this.$store.state.categoryList;
     },
     categoryName() {
       return (
@@ -49,7 +51,9 @@ export default {
       );
     },
     categoryImgSrc() {
-      const snakeCaseCategoryName = parseStringToSnakeCase(this.categoryName);
+      const snakeCaseCategoryName = stringSentenceToSnakeCase(
+        this.categoryName
+      );
       try {
         return require(`../assets/category_icons/${snakeCaseCategoryName}.png`);
       } catch (e) {
@@ -58,32 +62,21 @@ export default {
     }
   },
   methods: {
-    fetchCategories() {
-      if (!this.$store.state.categoryList) {
-        this.loading = true;
-        this.$store
-          .dispatch('fetchCategories')
-          .catch((err) => {
-            this.error = err;
-          })
-          .finally(() => {
-            this.loading = false;
-          });
+    async fetchCategories() {
+      if (this.$store.state.categoryList.length) return;
+      try {
+        await this.$store.dispatch('fetchCategories');
+      } catch (error) {
+        this.error = error;
       }
     },
-    fetchItem(itemId) {
-      this.loading = true;
-      this.$API
-        .getItem(itemId)
-        .then(({ data }) => {
-          this.item = data;
-        })
-        .catch((err) => {
-          this.error = err;
-        })
-        .finally(() => {
-          this.loading = false;
-        });
+    async fetchItem(itemId) {
+      try {
+        const { data } = await this.$API.getItem(itemId);
+        this.item = data;
+      } catch (error) {
+        this.error = error;
+      }
     }
   }
 };
