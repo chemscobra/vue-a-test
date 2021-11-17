@@ -25,15 +25,12 @@ export default {
   getItem(itemId) {
     return axios.get(`/item/${itemId}`);
   },
-
-  updateItem(itemId, payload) {
-    return axios.put(`/item/${itemId}`, payload);
+  updateItem(payload) {
+    return axios.put(`/item`, payload);
   },
-
   createItem(payload) {
     return axios.post('/item', payload);
   },
-
   deleteItem(itemId) {
     return axios.delete(`/item/${itemId}`);
   }

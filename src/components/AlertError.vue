@@ -11,7 +11,7 @@ export default {
   name: 'ItemListError',
   props: {
     error: {
-      type: Object,
+      type: Error,
       required: true
     }
   }

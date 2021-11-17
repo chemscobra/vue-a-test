@@ -1,8 +1,23 @@
 <template>
   <div class="inventory">
-    <ItemListSkeleton v-if="loading" />
+    <ItemListSkeleton class="mt-20" v-if="loading" />
     <AlertError v-else-if="error" :error="error" />
-    <ItemList v-else :items="itemList" />
+    <div v-else>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn
+          color="info"
+          class="mb-4 font-weight-bold"
+          large
+          @click.prevent="itemFormDialog = true"
+        >
+          <v-icon>mdi-plus</v-icon>
+          NEW ITEM
+        </v-btn>
+      </v-card-actions>
+      <ItemList :items="itemList" @open-dialog="itemFormDialog = true" />
+    </div>
+    <ItemForm v-model="itemFormDialog" />
   </div>
 </template>
 
@@ -10,20 +25,25 @@
 import ItemList from '../components/ItemList.vue';
 import ItemListSkeleton from '../components/ItemListSkeleton.vue';
 import AlertError from '../components/AlertError.vue';
+import ItemForm from '../components/forms/ItemForm.vue';
+
 export default {
   name: 'Inventory',
   components: {
     ItemList,
     ItemListSkeleton,
-    AlertError
+    AlertError,
+    ItemForm
   },
   data() {
     return {
       loading: false,
       error: null
+      // dialog: false
     };
   },
   created() {
+    this.fetchCategories();
     this.fetchItems();
   },
   methods: {
@@ -39,11 +59,24 @@ export default {
             this.loading = false;
           });
       }
+    },
+    fetchCategories() {
+      this.$store.dispatch('fetchCategories').catch((err) => {
+        this.error = err;
+      });
     }
   },
   computed: {
     itemList() {
       return this.$store.state.itemList;
+    },
+    itemFormDialog: {
+      get() {
+        return this.$store.state.itemFormDialog;
+      },
+      set(value) {
+        this.$store.commit('setItemFormDialog', value);
+      }
     }
   }
 };
