@@ -70,13 +70,13 @@
             icon
             v-bind="attrs"
             v-on="on"
-            color="info"
+            color="indigo lighten-2"
           >
-            <v-icon color="info"> mdi-arrow-down </v-icon>
+            <v-icon color="indigo lighten-2"> mdi-arrow-down </v-icon>
           </v-btn>
         </template>
         <v-card>
-          <v-card-title class="headline error" primary-title>
+          <v-card-title class="headline indigo lighten-2" primary-title>
             Buy Item
           </v-card-title>
 
@@ -99,7 +99,9 @@
               Cancel
             </v-btn>
             <v-spacer></v-spacer>
-            <v-btn color="info" text dark @click.prevent="emitBuy"> Buy </v-btn>
+            <v-btn color="indigo lighten-2" text dark @click.prevent="emitBuy">
+              Buy
+            </v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -110,14 +112,14 @@
             icon
             v-bind="attrs"
             v-on="on"
-            color="success"
+            color="blue darken-2"
           >
-            <v-icon color="success"> mdi-arrow-up </v-icon>
+            <v-icon color="blue darken-2"> mdi-arrow-up </v-icon>
           </v-btn>
         </template>
 
         <v-card>
-          <v-card-title class="headline error" primary-title>
+          <v-card-title class="headline blue darken-2" primary-title>
             Sell Item
           </v-card-title>
 
@@ -140,7 +142,7 @@
               Cancel
             </v-btn>
             <v-spacer></v-spacer>
-            <v-btn color="success" text dark @click.prevent="emitSell">
+            <v-btn color="blue darken-2" text dark @click.prevent="emitSell">
               Sell
             </v-btn>
           </v-card-actions>
